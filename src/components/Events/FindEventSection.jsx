@@ -12,7 +12,7 @@ export default function FindEventSection() {
 
   const { data, isPending, isError, error } = useQuery({
     queryKey: ["events", { search: searchTerm }],
-    queryFn: () => fetchEvents(searchTerm),
+    queryFn: ({ signal }) => fetchEvents({ signal, searchTerm }),
   });
 
   function handleSubmit(event) {
@@ -30,7 +30,7 @@ export default function FindEventSection() {
     content = (
       <ErrorBlock
         title="An error occured"
-        message={error.info?.message || "Failed to getch events."}
+        message={error.info?.message || "Failed to fetch events."}
       />
     );
   }
