@@ -33,7 +33,7 @@ export default function NewEvent() {
             </Link>
             <button type="submit" className="button">
               Create
-            </button>{" "}
+            </button>
           </>
         )}
       </EventForm>
