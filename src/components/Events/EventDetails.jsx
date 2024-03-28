@@ -1,16 +1,16 @@
-import { Link, Outlet, useParams, useNavigate } from "react-router-dom";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
+import { useQuery, useMutation } from "@tanstack/react-query";
 
 import Header from "../Header.jsx";
-import { fetchEvent, deleteEvent, queryClient } from "../../util/http";
-import ErrorBlock from "../UI/ErrorBlock";
+import { fetchEvent, deleteEvent, queryClient } from "../../util/http.js";
+import ErrorBlock from "../UI/ErrorBlock.jsx";
 
 export default function EventDetails() {
   const params = useParams();
   const navigate = useNavigate();
 
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ["event", params.id],
+    queryKey: ["events", params.id],
     queryFn: ({ signal }) => fetchEvent({ signal, id: params.id }),
   });
 
@@ -19,6 +19,7 @@ export default function EventDetails() {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["events"],
+        refetchType: "none",
       });
       navigate("/events");
     },
@@ -32,7 +33,7 @@ export default function EventDetails() {
 
   if (isPending) {
     content = (
-      <div id="event-details-contenet" className="center">
+      <div id="event-details-content" className="center">
         <p>Fetching event data...</p>
       </div>
     );
@@ -40,9 +41,9 @@ export default function EventDetails() {
 
   if (isError) {
     content = (
-      <div id="event-details-contenet" className="center">
+      <div id="event-details-content" className="center">
         <ErrorBlock
-          title="Failed to load events."
+          title="Failed to load event"
           message={
             error.info?.message ||
             "Failed to fetch event data, please try again later."
@@ -64,22 +65,22 @@ export default function EventDetails() {
         <header>
           <h1>{data.title}</h1>
           <nav>
-            <button onSumbit={handleDelete}>Delete</button>
+            <button onClick={handleDelete}>Delete</button>
             <Link to="edit">Edit</Link>
           </nav>
-          <div id="event-details-content">
-            <img src={`http://localhost:3000/${data.image}`} alt={data.title} />
-            <div id="event-details-info">
-              <div>
-                <p id="event-details-location">{data.location}</p>
-                <time dateTime={`Todo-DateT$Todo-Time`}>
-                  {formattedDate} @ {data.time}
-                </time>
-              </div>
-              <p id="event-details-description">{data.description}</p>
-            </div>
-          </div>
         </header>
+        <div id="event-details-content">
+          <img src={`http://localhost:3000/${data.image}`} alt={data.title} />
+          <div id="event-details-info">
+            <div>
+              <p id="event-details-location">{data.location}</p>
+              <time dateTime={`Todo-DateT$Todo-Time`}>
+                {formattedDate} @ {data.time}
+              </time>
+            </div>
+            <p id="event-details-description">{data.description}</p>
+          </div>
+        </div>
       </>
     );
   }
