@@ -1,10 +1,10 @@
+import { useState } from "react";
 import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 import { useQuery, useMutation } from "@tanstack/react-query";
 
 import Header from "../Header.jsx";
 import { fetchEvent, deleteEvent, queryClient } from "../../util/http.js";
 import ErrorBlock from "../UI/ErrorBlock.jsx";
-import { useState } from "react";
 import Modal from "../UI/Modal.jsx";
 
 export default function EventDetails() {
@@ -108,7 +108,7 @@ export default function EventDetails() {
         <Modal onClose={handleStopDelete}>
           <h2>Are you sure?</h2>
           <p>
-            Do you really want to delete this event? This action can't be
+            Do you really want to delete this event? This action cannot be
             undone.
           </p>
           <div className="form-actions">
@@ -126,7 +126,7 @@ export default function EventDetails() {
           </div>
           {isErrorDeleting && (
             <ErrorBlock
-              title="Failed to deelte event"
+              title="Failed to delete event"
               message={
                 deleteError.info?.message ||
                 "Failed to delete event, please try again later."
